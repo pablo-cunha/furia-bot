@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useEffect, useRef, useState } from 'react'
 import { furiaData } from '../data/botData';
 import "./ChatBot.css"
 
@@ -14,6 +14,12 @@ const ChatBot = () => {
       ]);
 
     const [input, setInput] = useState('')
+
+    const messagesEndRef = useRef(null)
+
+    useEffect(() => {
+        messagesEndRef.current?.scrollIntoView({behavior: 'smooth'})
+    }, [messages])
 
     const handleSend = () => {
         if(!input.trim()) {
@@ -67,6 +73,7 @@ const ChatBot = () => {
                         <p>{msg.text}</p>
                     </div>
                 ))}
+                <div ref={messagesEndRef}/>
             </div>
             <div className="chat-input">
                 <input type="text" 
