@@ -94,7 +94,7 @@ const ChatBot = () => {
                     <p>Desenvolvido por Pablo Cunha</p>
                 </div>
                 <div>
-                    <a href="http://">Repositório no Github</a>
+                    <a href="https://github.com/pablo-cunha/furia-bot">Repositório no Github</a>
                 </div>        
             </div>
         </>
