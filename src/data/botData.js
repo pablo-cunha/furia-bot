@@ -17,5 +17,5 @@ export const furiaData = {
     'sidde',
     'YEKINDAR'
   ],
-  lojaOficial: '🔗 https://www.furia.gg/'
+  lojaOficial: 'https://www.furia.gg/'
 };

@@ -29,34 +29,56 @@ const ChatBot = () => {
     // Função que determina a resposta do bot
     const getBotResponse = (userInput) => {
         const input = userInput.trim().toLocaleLowerCase()
-        let response = ""
-    
+
         switch (input) {
-        case '1':
-            response = `🎮 Últimos jogos:\n${furiaData.ultimosJogos.join('\n')}\n\nAlgo mais? Digite a opção desejada ou "menu".`
-            break
-        case '2':
-            response = `📅 Agenda:\n- ${furiaData.proximosJogos.join('\n')}\n\nAlgo mais? Digite a opção desejada ou "menu".`
-            break
-        case '3':
-            response = `👥 Elenco atual:\n${furiaData.elenco.join('\n')}\n\nAlgo mais? Digite a opção desejada ou "menu".`
-            break
-        case '4':
-            response = `🛍️ Loja oficial:\n${furiaData.lojaOficial}\n\nAlgo mais? Digite a opção desejada ou "menu".`
-            break
-        case 'menu':
-            response =
-            "Escolha uma opção:\n\n" +
-            "1️⃣ Últimos jogos\n" +
-            "2️⃣ Agenda de partidas\n" +
-            "3️⃣ Elenco da FURIA\n" +
-            "4️⃣ Loja oficial"
-            break
-        default:
-            response = "Não entendi 😅. Digite 1, 2, 3, 4 ou 'menu', por favor!"
+            case '1':
+                return {
+                    text: `🎮 Últimos jogos:\n${furiaData.ultimosJogos.join('\n')}\n\nAlgo mais? Digite a opção desejada ou "menu".`,
+                    sender: "bot"
+                }
+            case '2':
+                return {
+                    text: `📅 Agenda:\n- ${furiaData.proximosJogos.join('\n')}\n\nAlgo mais? Digite a opção desejada ou "menu".`,
+                    sender: "bot"
+                }
+            case '3':
+                return {
+                    text: `👥 Elenco atual:\n${furiaData.elenco.join('\n')}\n\nAlgo mais? Digite a opção desejada ou "menu".`,
+                    sender: "bot"
+                }
+            case '4':
+                return {
+                    text: (
+                        <>
+                            🛍️ Loja oficial:{" "}
+                            <a href={furiaData.lojaOficial} target="_blank" rel="noopener noreferrer">
+                                Acesse aqui
+                            </a>
+                            <br /><br />
+                            Algo mais? Digite a opção desejada ou "menu".
+                        </>
+                    ),
+                    sender: "bot"
+                }
+            case 'menu':
+                return {
+                    text: (
+                        <>
+                            Escolha uma opção:<br /><br />
+                            1️⃣ Últimos jogos<br />
+                            2️⃣ Agenda de partidas<br />
+                            3️⃣ Elenco da FURIA<br />
+                            4️⃣ Loja oficial
+                        </>
+                    ),
+                    sender: "bot"
+                }
+            default:
+                return {
+                    text: "Não entendi 😅. Digite 1, 2, 3, 4 ou 'menu', por favor!",
+                    sender: "bot"
+                }
         }
-    
-        return { text: response, sender: "bot" }
     }
 
     /*
@@ -90,7 +112,7 @@ const ChatBot = () => {
                         <div key={index} 
                         className={msg.sender === 'user' ? 'user-message' : 'bot-message'}
                         >
-                            <p>{msg.text}</p>
+                            {typeof msg.text === 'string' ? <p>{msg.text}</p> : msg.text}
                         </div>
                     ))}
                     <div ref={messagesEndRef}/>
