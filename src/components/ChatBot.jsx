@@ -31,11 +31,11 @@ const ChatBot = () => {
 
         switch (input.trim().toLocaleLowerCase()) {
             case '1':
-              botResponse.text = `🔍 Últimos jogos:\n${furiaData.ultimosJogos.join('\n')}\n\n
+              botResponse.text = `🎮 Últimos jogos:\n${furiaData.ultimosJogos.join('\n')}\n\n
               Algo mais? Digite a opção desejada ou "menu".`
               break
             case '2':
-              botResponse.text = `📅 Agenda:\n-${furiaData.proximosJogos.join('\n')}\n\n
+              botResponse.text = `📅 Agenda:\n- ${furiaData.proximosJogos.join('\n')}\n\n
               Algo mais? Digite a opção desejada ou "menu".`
               break
             case '3':
@@ -64,27 +64,40 @@ const ChatBot = () => {
     }
 
     return (
-        <div className="chat-container">
-            <div className="chat-box">
-                {messages.map((msg, index) => (
-                    <div key={index} 
-                    className={msg.sender === 'user' ? 'user-message' : 'bot-message'}
-                    >
-                        <p>{msg.text}</p>
-                    </div>
-                ))}
-                <div ref={messagesEndRef}/>
+        <>
+            <div className="chat-container">
+                <div className="chat-header">
+                    FuriaBOT
+                </div>
+                <div className="chat-box">
+                    {messages.map((msg, index) => (
+                        <div key={index} 
+                        className={msg.sender === 'user' ? 'user-message' : 'bot-message'}
+                        >
+                            <p>{msg.text}</p>
+                        </div>
+                    ))}
+                    <div ref={messagesEndRef}/>
+                </div>
+                <div className="chat-input">
+                    <input type="text" 
+                    placeholder="Digite sua mensagem..." 
+                    value={input}
+                    onChange={(event) => setInput(event.target.value)}
+                    onKeyDown={(event) => event.key === "Enter" && handleSend()}
+                    />
+                    <button>Enviar</button>
+                </div>
             </div>
-            <div className="chat-input">
-                <input type="text" 
-                placeholder="Digite sua mensagem..." 
-                value={input}
-                onChange={(event) => setInput(event.target.value)}
-                onKeyDown={(event) => event.key === "Enter" && handleSend()}
-                />
-                <button>Enviar</button>
+            <div className="footer-container">
+                <div>
+                    <p>Desenvolvido por Pablo Cunha</p>
+                </div>
+                <div>
+                    <a href="http://">Repositório no Github</a>
+                </div>        
             </div>
-        </div>
+        </>
     )
 }
 
