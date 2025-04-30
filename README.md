@@ -52,7 +52,7 @@ Acesse o projeto em seu navegador:
 ---
 
 ## 📁 Estrutura de diretórios (simplificada)
-    ```csharp
+```chsarp
     furia-bot/
     │
     ├── public/
@@ -63,7 +63,7 @@ Acesse o projeto em seu navegador:
     │   └── App.jsx           # Componente principal
     ├── README.md
     └── package.json
-   ```
+```
 ---
 
 ## 📄 Licença
@@ -73,4 +73,4 @@ Este projeto foi desenvolvido exclusivamente para fins educacionais e de avalia�
 
 ## 👨‍💻 Desenvolvido por
 Pablo Cunha
-![LinkedIn](https://www.linkedin.com/in/pablo-cunha/)
+[LinkedIn](https://www.linkedin.com/in/pablo-cunha/)
