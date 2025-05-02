@@ -18,6 +18,7 @@ Acesse o projeto em seu navegador:
 - 📅 Consulta de **últimos jogos** e **agenda** da FURIA.
 - 👥 Visualização do **elenco atual**.
 - 🛍️ Acesso direto à **loja oficial**.
+- 📰 Informa as notícias mais recentes sobre a FURIA.
 - ✨ Interface estilizada com responsividade e acessibilidade.
 
 ---

@@ -11,7 +11,8 @@ const ChatBot = () => {
                 "1️⃣ Últimos jogos\n" +
                 "2️⃣ Agenda de partidas\n" +
                 "3️⃣ Elenco da FURIA\n" +
-                "4️⃣ Loja oficial", 
+                "4️⃣ Loja oficial\n" + 
+                "5️⃣ Últimas notícias da FURIA", 
                 sender: "bot" }
       ]);
     
@@ -60,6 +61,12 @@ const ChatBot = () => {
                     ),
                     sender: "bot"
                 }
+            case '5':
+                return {
+                    text: '🔄 Buscando as últimas notícias da FURIA...',
+                    sender: 'bot',
+                    isLoading: true
+                }
             case 'menu':
                 return {
                     text: (
@@ -68,37 +75,108 @@ const ChatBot = () => {
                             1️⃣ Últimos jogos<br />
                             2️⃣ Agenda de partidas<br />
                             3️⃣ Elenco da FURIA<br />
-                            4️⃣ Loja oficial
+                            4️⃣ Loja oficial<br />
+                            5️⃣ Últimas notícias da FURIA
                         </>
                     ),
                     sender: "bot"
                 }
             default:
                 return {
-                    text: "Não entendi 😅. Digite 1, 2, 3, 4 ou 'menu', por favor!",
+                    text: "Não entendi 😅. Digite de 1 a 5 ou 'menu', por favor!",
                     sender: "bot"
                 }
         }
     }
+
+    // Função que consome API de notícias, filtradas para buscar notícias relacionadas à FURIA
+    const fetchFuriaNews = async () => {
+        const apiKey = import.meta.env.VITE_NEWS_API_KEY 
+        const url = `https://newsapi.org/v2/everything?q=FURIA&language=pt&sortBy=publishedAt&pageSize=3&apiKey=${apiKey}`
+      
+        try {
+          // Envia uma requisição GET à API de notícias com base na pesquisa "FURIA"
+          const response = await fetch(url)
+          // Converte a resposta da API em JSON
+          const data = await response.json()
+        
+          // Verifica se a resposta trouxe alguma noticia
+          if (data.articles && data.articles.length > 0) {
+            // Cria o HTML que será exposto com as notícias
+            const articles = data.articles.map((article) => (
+              <div key={article.url}>
+                <a href={article.url} target="_blank" rel="noopener noreferrer">
+                  {article.title}
+                </a>
+              </div>
+            ))
+            
+            // Retorna mensagem de resposta do bot, com o HTML das notícias embutido
+            return {
+              text: (
+                <>
+                  📰 Últimas notícias da FURIA:
+                  {articles}
+                  <br />
+                  Algo mais? Digite a opção desejada ou "menu".
+                </>
+              ),
+              sender: 'bot'
+            }
+          } else {
+            // Mensagem para caso não se encontre nenhuma notícia
+            return {
+              text: 'Desculpe, não encontrei notícias recentes da FURIA.',
+              sender: 'bot'
+            }
+          }
+        } catch (error) {
+          // Em caso de erro na requisição, imprime o erro no console e retorna mensagem de erro pro usuário
+          console.error('Erro ao buscar notícias:', error)
+          return {
+            text: 'Ocorreu um erro ao buscar as notícias. Por favor, tente novamente mais tarde.',
+            sender: 'bot'
+          };
+        }
+      };      
 
     /*
        Função que trata o envio de mensagens pelo usuário.
        Válida se o campo de input não está vazio, define a resposta do bot,
        atualiza o estado de mensagens e limpa o input.
     */
-    const handleSend = () => {
+    const handleSend = async () => {
         // Ignora mensagens em branco
         if(!input.trim()) {
             return
         }
 
-        const userMessage = {text: input, sender: "user"}
-        let botResponse = getBotResponse(input)
+        const userMessage = { text: input, sender: 'user' }
+        setMessages((prevMessages) => [...prevMessages, userMessage])
+        setInput('')
 
-        // Atualiza o estado de mensagens, adicionando a entrada do usuário e a resposta do bot
-        setMessages([...messages, userMessage, botResponse]);
-        // Limpa o campo de input após o envio
-        setInput('');
+        const inputLower = input.trim().toLowerCase()
+
+        if (inputLower === '5') {
+            // Adiciona uma mensagem de carregamento
+            setMessages((prevMessages) => [
+            ...prevMessages,
+            { text: '🔄 Buscando as últimas notícias da FURIA...', sender: 'bot' }
+            ])
+
+            // Busca as notícias
+            const newsMessage = await fetchFuriaNews()
+
+            // Atualiza a última mensagem com as notícias
+            setMessages((prevMessages) => {
+            const updatedMessages = [...prevMessages]
+            updatedMessages[updatedMessages.length - 1] = newsMessage
+            return updatedMessages
+            })
+        } else {
+            const botResponse = getBotResponse(input)
+            setMessages((prevMessages) => [...prevMessages, botResponse])
+        }
     }
 
     return (
